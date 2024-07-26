@@ -1,6 +1,7 @@
-/* The sw object that is constructed by the Stopwatch constructor function has:
-1 Property:
-    duration
+/* The sw object constructed by the Stopwatch constructor-function has:
+2 Properties:
+    sec
+    min
 3 Methods:
     reset
     start
@@ -15,15 +16,32 @@ function Stopwatch() {
     let stop = document.querySelector('#stop');
     let reset = document.querySelector('#reset');    
     let started = false;
+  
 
     // object properties and methods
-    this.duration = 0;
+    this.sec = 0;
+    this.min = 9;
     
     this.start = function() {
         if(!started) {
             timer = setInterval(() => {
-                this.duration++
-                timeDisp.innerHTML = `${this.duration}`
+                this.sec++
+                
+                if(this.sec % 60 == 0) {
+                    this.min++
+                    this.sec = 0
+                }
+
+                //display time in 00:00 format
+                if(this.min < 10 && this.sec < 10) {
+                    timeDisp.innerHTML = `0${this.min}:0${this.sec}`    
+                } else if(this.min < 10 && this.sec >= 10) {
+                    timeDisp.innerHTML = `0${this.min}:${this.sec}`    
+                } else if(this.min >= 10 && this.sec < 10) {
+                    timeDisp.innerHTML = `${this.min}:0${this.sec}`    
+                } else if(this.min >= 10 && this.sec >= 10) {
+                    timeDisp.innerHTML = `${this.min}:${this.sec}`
+                }
             }, 1000);    
         } else {
             throw new Error('Already started.')
@@ -43,8 +61,9 @@ function Stopwatch() {
     this.reset = function() {
         started = false
         clearInterval(timer)
-        this.duration = 0;
-        timeDisp.innerHTML = `${this.duration}`
+        this.sec = 0;
+        this.min = 0;
+        timeDisp.innerHTML = '00:00'
     }
 
     //connect sw methods to html buttons
